@@ -31,10 +31,11 @@ public class Main {
         Collections.addAll(routeBuilder, busStops);
 
 
-        Route absolutleyNewRoute = routeBuilder.build();
+        Route hisRoute = routeBuilder.build();
         LinkedList<Bus> buses = new LinkedList<>();
-        for (int number = 0; number < 7; number++) {
-            buses.add(new Bus(absolutleyNewRoute, number, 50));
+        buses.add(new Bus(hisRoute, 0, 50, 3));
+        for (int number = 1; number < 6; number++) {
+            buses.add(new Bus(hisRoute, number, 50, 1));
         }
         buses.forEach((bus) -> bus.start());
     }

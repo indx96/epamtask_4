@@ -1,5 +1,6 @@
 package com.epam.busstops.transport;
 
+import com.epam.busstops.exceptions.BusRidingException;
 import com.epam.busstops.route.BusStop;
 import com.epam.busstops.route.Route;
 import org.apache.log4j.Logger;
@@ -15,11 +16,16 @@ public class Bus extends Thread {
     private int busNumber;
     private int currPassengersCount;
     private int maxPassengersCount;
+    private int length;
 
-    public Bus(Route route, int number, int maxPassengersCount) {
+    public Bus(Route route,
+               int number,
+               int maxPassengersCount,
+               int length) {
         this.route = route;
         this.busNumber = number;
         this.maxPassengersCount = maxPassengersCount;
+        this.length = length;
     }
 
 
@@ -54,17 +60,19 @@ public class Bus extends Thread {
         return currPassengersCount;
     }
 
+    public int getLength() {
+        return length;
+    }
+
     @Override
     public void run() {
         for (BusStop stop : route.getStops()) {
             try {
                 stop.busRideIn(this);
-            } catch (BrokenBarrierException e) {
-                log.error(e);
-            } catch (InterruptedException e) {
+            } catch (BusRidingException e) {
                 log.error(e);
             }
+            log.debug("bus number " + busNumber + " finished");
         }
-        log.debug("bus number " + busNumber + " finished");
     }
 }
